@@ -64,4 +64,18 @@ export function onMessageListener(callback) {
   });
 }
 
+export const initializeFCM = async (onMessageCallback) => {
+  const messaging = firebase.messaging();
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+      const token = await messaging.getToken();
+      console.log("FCM Token:", token);
+      messaging.onMessage(onMessageCallback);
+    }
+  } catch (error) {
+    console.error("FCM Error:", error);
+  }
+};
+
 export { messaging };
